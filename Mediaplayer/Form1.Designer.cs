@@ -29,82 +29,98 @@ partial class Form1
     /// </summary>
     private void InitializeComponent()
     {
-        btn_open_file = new Button();
-        btn_open_image = new Button();
         videoView1 = new LibVLCSharp.WinForms.VideoView();
         groupBox1 = new GroupBox();
-        button3 = new Button();
-        button2 = new Button();
+        btn_next = new Button();
+        btn_previous = new Button();
         btn_stop = new Button();
         btn_play_stop = new Button();
-        pb_track = new ProgressBar();
         tb_ = new TrackBar();
+        tb_progress = new TrackBar();
+        lv_playlist = new ListView();
+        menuStrip1 = new MenuStrip();
+        tsmi_media = new ToolStripMenuItem();
+        tsmi_file = new ToolStripMenuItem();
+        tsmi_audio = new ToolStripMenuItem();
+        tsmi_video = new ToolStripMenuItem();
+        tsmi_image = new ToolStripMenuItem();
+        toolStripMenuItem3 = new ToolStripMenuItem();
+        tsmi_audiolist = new ToolStripMenuItem();
+        tsmitb_audio = new ToolStripTextBox();
+        tsmi_videolist = new ToolStripMenuItem();
+        tsmitb_video = new ToolStripTextBox();
+        ismi_imagelist = new ToolStripMenuItem();
+        tsmitb_image = new ToolStripTextBox();
+        tsmi_delete_playlist = new ToolStripMenuItem();
+        tsmi_ = new ToolStripMenuItem();
+        tsmi_audiolists = new ToolStripMenuItem();
+        tscb_audio = new ToolStripComboBox();
+        tsmi_videolists = new ToolStripMenuItem();
+        tscb_video = new ToolStripComboBox();
+        tsmi_album = new ToolStripMenuItem();
+        tscb_album = new ToolStripComboBox();
+        lb_playlistname = new Label();
+        lb_current_playlist = new Label();
+        lb_playlistid = new Label();
+        lb_currenttracktime = new Label();
+        lb_trackduration = new Label();
+        btn_addfile = new Button();
+        pb_audioart = new PictureBox();
+        btn_deletefile = new Button();
+        lb_fileid = new Label();
+        lb_listtype = new Label();
+        lb_listpos = new Label();
         ((System.ComponentModel.ISupportInitialize)videoView1).BeginInit();
         groupBox1.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)tb_).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)tb_progress).BeginInit();
+        menuStrip1.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)pb_audioart).BeginInit();
         SuspendLayout();
-        // 
-        // btn_open_file
-        // 
-        btn_open_file.Location = new Point(40, 76);
-        btn_open_file.Name = "btn_open_file";
-        btn_open_file.Size = new Size(82, 56);
-        btn_open_file.TabIndex = 1;
-        btn_open_file.Text = "Media Öffnen";
-        btn_open_file.UseVisualStyleBackColor = true;
-        btn_open_file.Click += btn_open_file_Click;
-        // 
-        // btn_open_image
-        // 
-        btn_open_image.Location = new Point(40, 260);
-        btn_open_image.Name = "btn_open_image";
-        btn_open_image.Size = new Size(82, 52);
-        btn_open_image.TabIndex = 2;
-        btn_open_image.Text = "Bild Öffnen";
-        btn_open_image.UseVisualStyleBackColor = true;
-        btn_open_image.Click += btn_open_image_Click;
         // 
         // videoView1
         // 
         videoView1.BackColor = Color.Black;
-        videoView1.Location = new Point(198, 76);
+        videoView1.Location = new Point(146, 76);
         videoView1.MediaPlayer = null;
         videoView1.Name = "videoView1";
-        videoView1.Size = new Size(416, 236);
+        videoView1.Size = new Size(692, 508);
         videoView1.TabIndex = 3;
         // 
         // groupBox1
         // 
-        groupBox1.Controls.Add(button3);
-        groupBox1.Controls.Add(button2);
+        groupBox1.Controls.Add(btn_next);
+        groupBox1.Controls.Add(btn_previous);
         groupBox1.Controls.Add(btn_stop);
         groupBox1.Controls.Add(btn_play_stop);
-        groupBox1.Location = new Point(198, 366);
+        groupBox1.Location = new Point(272, 662);
         groupBox1.Name = "groupBox1";
-        groupBox1.Size = new Size(416, 72);
+        groupBox1.Size = new Size(416, 74);
         groupBox1.TabIndex = 5;
         groupBox1.TabStop = false;
         groupBox1.Text = "groupBox1";
         // 
-        // button3
+        // btn_next
         // 
-        button3.BackColor = Color.Black;
-        button3.FlatStyle = FlatStyle.Popup;
-        button3.Location = new Point(266, 26);
-        button3.Name = "button3";
-        button3.Size = new Size(35, 29);
-        button3.TabIndex = 4;
-        button3.UseVisualStyleBackColor = false;
+        btn_next.BackColor = Color.Black;
+        btn_next.FlatStyle = FlatStyle.Popup;
+        btn_next.Location = new Point(266, 26);
+        btn_next.Name = "btn_next";
+        btn_next.Size = new Size(35, 29);
+        btn_next.TabIndex = 4;
+        btn_next.UseVisualStyleBackColor = false;
+        btn_next.Click += btn_next_Click;
         // 
-        // button2
+        // btn_previous
         // 
-        button2.BackColor = Color.Black;
-        button2.FlatStyle = FlatStyle.Popup;
-        button2.Location = new Point(143, 26);
-        button2.Name = "button2";
-        button2.Size = new Size(35, 29);
-        button2.TabIndex = 3;
-        button2.UseVisualStyleBackColor = false;
+        btn_previous.BackColor = Color.Black;
+        btn_previous.FlatStyle = FlatStyle.Popup;
+        btn_previous.Location = new Point(143, 26);
+        btn_previous.Name = "btn_previous";
+        btn_previous.Size = new Size(35, 29);
+        btn_previous.TabIndex = 3;
+        btn_previous.UseVisualStyleBackColor = false;
+        btn_previous.Click += btn_previous_Click;
         // 
         // btn_stop
         // 
@@ -128,64 +144,382 @@ partial class Form1
         btn_play_stop.UseVisualStyleBackColor = false;
         btn_play_stop.Click += btn_play_stop_Click;
         // 
-        // pb_track
-        // 
-        pb_track.Location = new Point(198, 331);
-        pb_track.Name = "pb_track";
-        pb_track.Size = new Size(416, 29);
-        pb_track.TabIndex = 6;
-        // 
         // tb_
         // 
-        tb_.BackColor = Color.Black;
+        tb_.BackColor = Color.DarkOrange;
         tb_.LargeChange = 1;
-        tb_.Location = new Point(745, 322);
+        tb_.Location = new Point(716, 635);
         tb_.Maximum = 100;
         tb_.Name = "tb_";
         tb_.Orientation = Orientation.Vertical;
-        tb_.Size = new Size(56, 130);
+        tb_.Size = new Size(56, 199);
         tb_.TabIndex = 7;
         tb_.TickStyle = TickStyle.Both;
         tb_.Value = 50;
         tb_.Scroll += tb__Scroll;
+        // 
+        // tb_progress
+        // 
+        tb_progress.Location = new Point(146, 600);
+        tb_progress.Maximum = 100;
+        tb_progress.Name = "tb_progress";
+        tb_progress.Size = new Size(692, 56);
+        tb_progress.TabIndex = 8;
+        tb_progress.TickStyle = TickStyle.None;
+        tb_progress.MouseDown += tb_progress_MouseDown;
+        tb_progress.MouseUp += tb_progress_MouseUp;
+        // 
+        // lv_playlist
+        // 
+        lv_playlist.FullRowSelect = true;
+        lv_playlist.GridLines = true;
+        lv_playlist.Location = new Point(922, 73);
+        lv_playlist.Name = "lv_playlist";
+        lv_playlist.Size = new Size(275, 514);
+        lv_playlist.TabIndex = 9;
+        lv_playlist.UseCompatibleStateImageBehavior = false;
+        lv_playlist.View = View.Details;
+        lv_playlist.SelectedIndexChanged += lv_playlist_SelectedIndexChanged;
+        lv_playlist.DoubleClick += lv_playlist_DoubleClick;
+        // 
+        // menuStrip1
+        // 
+        menuStrip1.ImageScalingSize = new Size(20, 20);
+        menuStrip1.Items.AddRange(new ToolStripItem[] { tsmi_media, tsmi_ });
+        menuStrip1.Location = new Point(0, 0);
+        menuStrip1.Name = "menuStrip1";
+        menuStrip1.Size = new Size(1262, 28);
+        menuStrip1.TabIndex = 10;
+        menuStrip1.Text = "menuStrip1";
+        // 
+        // tsmi_media
+        // 
+        tsmi_media.DropDownItems.AddRange(new ToolStripItem[] { tsmi_file, toolStripMenuItem3, tsmi_delete_playlist });
+        tsmi_media.Name = "tsmi_media";
+        tsmi_media.Size = new Size(65, 24);
+        tsmi_media.Text = "Media";
+        // 
+        // tsmi_file
+        // 
+        tsmi_file.DropDownItems.AddRange(new ToolStripItem[] { tsmi_audio, tsmi_video, tsmi_image });
+        tsmi_file.Name = "tsmi_file";
+        tsmi_file.Size = new Size(198, 26);
+        tsmi_file.Text = "Datei öffnen";
+        // 
+        // tsmi_audio
+        // 
+        tsmi_audio.Name = "tsmi_audio";
+        tsmi_audio.Size = new Size(134, 26);
+        tsmi_audio.Text = "Audio";
+        tsmi_audio.Click += tsmi_audio_Click;
+        // 
+        // tsmi_video
+        // 
+        tsmi_video.Name = "tsmi_video";
+        tsmi_video.Size = new Size(134, 26);
+        tsmi_video.Text = "Video";
+        tsmi_video.Click += tsmi_video_Click;
+        // 
+        // tsmi_image
+        // 
+        tsmi_image.Name = "tsmi_image";
+        tsmi_image.Size = new Size(134, 26);
+        tsmi_image.Text = "Image";
+        tsmi_image.Click += tsmi_image_Click;
+        // 
+        // toolStripMenuItem3
+        // 
+        toolStripMenuItem3.DropDownItems.AddRange(new ToolStripItem[] { tsmi_audiolist, tsmi_videolist, ismi_imagelist });
+        toolStripMenuItem3.Name = "toolStripMenuItem3";
+        toolStripMenuItem3.Size = new Size(198, 26);
+        toolStripMenuItem3.Text = "Playlist erstellen";
+        // 
+        // tsmi_audiolist
+        // 
+        tsmi_audiolist.DropDownItems.AddRange(new ToolStripItem[] { tsmitb_audio });
+        tsmi_audiolist.Name = "tsmi_audiolist";
+        tsmi_audiolist.Size = new Size(134, 26);
+        tsmi_audiolist.Text = "Audio";
+        // 
+        // tsmitb_audio
+        // 
+        tsmitb_audio.Name = "tsmitb_audio";
+        tsmitb_audio.Size = new Size(100, 27);
+        tsmitb_audio.KeyUp += tsmitb_audio_KeyUp;
+        // 
+        // tsmi_videolist
+        // 
+        tsmi_videolist.DropDownItems.AddRange(new ToolStripItem[] { tsmitb_video });
+        tsmi_videolist.Name = "tsmi_videolist";
+        tsmi_videolist.Size = new Size(134, 26);
+        tsmi_videolist.Text = "Video";
+        // 
+        // tsmitb_video
+        // 
+        tsmitb_video.Name = "tsmitb_video";
+        tsmitb_video.Size = new Size(100, 27);
+        tsmitb_video.KeyUp += tsmitb_video_KeyUp;
+        // 
+        // ismi_imagelist
+        // 
+        ismi_imagelist.DropDownItems.AddRange(new ToolStripItem[] { tsmitb_image });
+        ismi_imagelist.Name = "ismi_imagelist";
+        ismi_imagelist.Size = new Size(134, 26);
+        ismi_imagelist.Text = "Image";
+        // 
+        // tsmitb_image
+        // 
+        tsmitb_image.Name = "tsmitb_image";
+        tsmitb_image.Size = new Size(100, 27);
+        tsmitb_image.KeyUp += tsmitb_image_KeyUp;
+        // 
+        // tsmi_delete_playlist
+        // 
+        tsmi_delete_playlist.Name = "tsmi_delete_playlist";
+        tsmi_delete_playlist.Size = new Size(198, 26);
+        tsmi_delete_playlist.Text = "Playlist löschen";
+        tsmi_delete_playlist.Click += tsmi_delete_playlist_Click;
+        // 
+        // tsmi_
+        // 
+        tsmi_.DropDownItems.AddRange(new ToolStripItem[] { tsmi_audiolists, tsmi_videolists, tsmi_album });
+        tsmi_.Name = "tsmi_";
+        tsmi_.Size = new Size(75, 24);
+        tsmi_.Text = "Playlists";
+        // 
+        // tsmi_audiolists
+        // 
+        tsmi_audiolists.DropDownItems.AddRange(new ToolStripItem[] { tscb_audio });
+        tsmi_audiolists.Name = "tsmi_audiolists";
+        tsmi_audiolists.Size = new Size(151, 26);
+        tsmi_audiolists.Text = "Audiolist";
+        // 
+        // tscb_audio
+        // 
+        tscb_audio.DropDownStyle = ComboBoxStyle.DropDownList;
+        tscb_audio.Name = "tscb_audio";
+        tscb_audio.Size = new Size(121, 28);
+        tscb_audio.SelectedIndexChanged += tscb_audio_SelectedIndexChanged;
+        // 
+        // tsmi_videolists
+        // 
+        tsmi_videolists.DropDownItems.AddRange(new ToolStripItem[] { tscb_video });
+        tsmi_videolists.Name = "tsmi_videolists";
+        tsmi_videolists.Size = new Size(151, 26);
+        tsmi_videolists.Text = "Videolist";
+        // 
+        // tscb_video
+        // 
+        tscb_video.DropDownStyle = ComboBoxStyle.DropDownList;
+        tscb_video.Name = "tscb_video";
+        tscb_video.Size = new Size(121, 28);
+        tscb_video.SelectedIndexChanged += tscb_video_SelectedIndexChanged;
+        // 
+        // tsmi_album
+        // 
+        tsmi_album.DropDownItems.AddRange(new ToolStripItem[] { tscb_album });
+        tsmi_album.Name = "tsmi_album";
+        tsmi_album.Size = new Size(151, 26);
+        tsmi_album.Text = "Album";
+        // 
+        // tscb_album
+        // 
+        tscb_album.DropDownStyle = ComboBoxStyle.DropDownList;
+        tscb_album.Name = "tscb_album";
+        tscb_album.Size = new Size(121, 28);
+        // 
+        // lb_playlistname
+        // 
+        lb_playlistname.AutoSize = true;
+        lb_playlistname.Location = new Point(1026, 50);
+        lb_playlistname.Name = "lb_playlistname";
+        lb_playlistname.Size = new Size(0, 20);
+        lb_playlistname.TabIndex = 11;
+        lb_playlistname.TextAlign = ContentAlignment.MiddleCenter;
+        // 
+        // lb_current_playlist
+        // 
+        lb_current_playlist.AutoSize = true;
+        lb_current_playlist.Location = new Point(1026, 50);
+        lb_current_playlist.Name = "lb_current_playlist";
+        lb_current_playlist.Size = new Size(55, 20);
+        lb_current_playlist.TabIndex = 12;
+        lb_current_playlist.Text = "Playlist";
+        // 
+        // lb_playlistid
+        // 
+        lb_playlistid.AutoSize = true;
+        lb_playlistid.Location = new Point(1212, 28);
+        lb_playlistid.Name = "lb_playlistid";
+        lb_playlistid.Size = new Size(69, 20);
+        lb_playlistid.TabIndex = 13;
+        lb_playlistid.Text = "playlistid";
+        lb_playlistid.Visible = false;
+        // 
+        // lb_currenttracktime
+        // 
+        lb_currenttracktime.AutoSize = true;
+        lb_currenttracktime.Location = new Point(104, 600);
+        lb_currenttracktime.Name = "lb_currenttracktime";
+        lb_currenttracktime.Size = new Size(36, 20);
+        lb_currenttracktime.TabIndex = 14;
+        lb_currenttracktime.Text = "--:--";
+        // 
+        // lb_trackduration
+        // 
+        lb_trackduration.AutoSize = true;
+        lb_trackduration.Location = new Point(844, 600);
+        lb_trackduration.Name = "lb_trackduration";
+        lb_trackduration.Size = new Size(36, 20);
+        lb_trackduration.TabIndex = 15;
+        lb_trackduration.Text = "--:--";
+        // 
+        // btn_addfile
+        // 
+        btn_addfile.Enabled = false;
+        btn_addfile.Location = new Point(932, 596);
+        btn_addfile.Name = "btn_addfile";
+        btn_addfile.Size = new Size(94, 29);
+        btn_addfile.TabIndex = 16;
+        btn_addfile.Text = "add";
+        btn_addfile.UseVisualStyleBackColor = true;
+        btn_addfile.Click += btn_addfile_Click;
+        // 
+        // pb_audioart
+        // 
+        pb_audioart.BackColor = Color.OrangeRed;
+        pb_audioart.Location = new Point(146, 76);
+        pb_audioart.Name = "pb_audioart";
+        pb_audioart.Size = new Size(692, 508);
+        pb_audioart.SizeMode = PictureBoxSizeMode.Zoom;
+        pb_audioart.TabIndex = 17;
+        pb_audioart.TabStop = false;
+        pb_audioart.Visible = false;
+        // 
+        // btn_deletefile
+        // 
+        btn_deletefile.Enabled = false;
+        btn_deletefile.Location = new Point(1062, 596);
+        btn_deletefile.Name = "btn_deletefile";
+        btn_deletefile.Size = new Size(94, 29);
+        btn_deletefile.TabIndex = 18;
+        btn_deletefile.TabStop = false;
+        btn_deletefile.Text = "delete";
+        btn_deletefile.UseVisualStyleBackColor = true;
+        btn_deletefile.Click += btn_deletefile_Click;
+        // 
+        // lb_fileid
+        // 
+        lb_fileid.AutoSize = true;
+        lb_fileid.Location = new Point(1147, 28);
+        lb_fileid.Name = "lb_fileid";
+        lb_fileid.Size = new Size(43, 20);
+        lb_fileid.TabIndex = 19;
+        lb_fileid.Text = "fileid";
+        lb_fileid.Visible = false;
+        // 
+        // lb_listtype
+        // 
+        lb_listtype.AutoSize = true;
+        lb_listtype.Location = new Point(1212, 48);
+        lb_listtype.Name = "lb_listtype";
+        lb_listtype.Size = new Size(57, 20);
+        lb_listtype.TabIndex = 20;
+        lb_listtype.Text = "listtype";
+        lb_listtype.Visible = false;
+        // 
+        // lb_listpos
+        // 
+        lb_listpos.AutoSize = true;
+        lb_listpos.Location = new Point(1147, 48);
+        lb_listpos.Name = "lb_listpos";
+        lb_listpos.Size = new Size(41, 20);
+        lb_listpos.TabIndex = 21;
+        lb_listpos.Text = "listid";
+        lb_listpos.Visible = false;
         // 
         // Form1
         // 
         AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
         BackColor = Color.DarkOrange;
-        ClientSize = new Size(800, 450);
+        ClientSize = new Size(1262, 873);
+        Controls.Add(lb_listpos);
+        Controls.Add(lb_listtype);
+        Controls.Add(lb_fileid);
+        Controls.Add(btn_deletefile);
+        Controls.Add(pb_audioart);
+        Controls.Add(btn_addfile);
+        Controls.Add(lb_trackduration);
+        Controls.Add(lb_currenttracktime);
+        Controls.Add(lb_playlistid);
+        Controls.Add(lb_current_playlist);
+        Controls.Add(lb_playlistname);
+        Controls.Add(lv_playlist);
         Controls.Add(tb_);
-        Controls.Add(pb_track);
         Controls.Add(groupBox1);
         Controls.Add(videoView1);
-        Controls.Add(btn_open_image);
-        Controls.Add(btn_open_file);
+        Controls.Add(tb_progress);
+        Controls.Add(menuStrip1);
         Cursor = Cursors.Hand;
         Name = "Form1";
         Text = "Mediaplayer";
-        Load += Form1_Load;
         ((System.ComponentModel.ISupportInitialize)videoView1).EndInit();
         groupBox1.ResumeLayout(false);
         ((System.ComponentModel.ISupportInitialize)tb_).EndInit();
+        ((System.ComponentModel.ISupportInitialize)tb_progress).EndInit();
+        menuStrip1.ResumeLayout(false);
+        menuStrip1.PerformLayout();
+        ((System.ComponentModel.ISupportInitialize)pb_audioart).EndInit();
         ResumeLayout(false);
         PerformLayout();
     }
 
-    private System.Windows.Forms.Button btn_open_image;
+    private System.Windows.Forms.ListView lv_playlist;
 
-    private System.Windows.Forms.Button btn_open_file;
+    private System.Windows.Forms.TrackBar tb_progress;
 
     
 
     #endregion
 
     private LibVLCSharp.WinForms.VideoView videoView1;
-    private GroupBox groupBox1;
+    private System.Windows.Forms.GroupBox groupBox1;
     private Button btn_play_stop;
-    private Button button3;
-    private Button button2;
+    private Button btn_next;
+    private Button btn_previous;
     private Button btn_stop;
-    private ProgressBar pb_track;
-    private TrackBar tb_;
+    private System.Windows.Forms.TrackBar tb_;
+    private MenuStrip menuStrip1;
+    private ToolStripMenuItem tsmi_media;
+    private ToolStripMenuItem tsmi_file;
+    private ToolStripMenuItem toolStripMenuItem3;
+    private ToolStripMenuItem tsmi_delete_playlist;
+    private ToolStripMenuItem tsmi_audio;
+    private ToolStripMenuItem tsmi_video;
+    private ToolStripMenuItem tsmi_image;
+    private ToolStripMenuItem tsmi_audiolist;
+    private ToolStripMenuItem tsmi_videolist;
+    private ToolStripMenuItem ismi_imagelist;
+    private ToolStripTextBox tsmitb_audio;
+    private ToolStripTextBox tsmitb_video;
+    private ToolStripTextBox tsmitb_image;
+    private ToolStripMenuItem tsmi_;
+    private ToolStripMenuItem tsmi_audiolists;
+    private ToolStripMenuItem tsmi_videolists;
+    private ToolStripMenuItem tsmi_album;
+    private ToolStripComboBox tscb_audio;
+    private ToolStripComboBox tscb_video;
+    private ToolStripComboBox tscb_album;
+    private Label lb_playlistname;
+    private System.Windows.Forms.Label lb_current_playlist;
+    private Label lb_playlistid;
+    private Label lb_currenttracktime;
+    private Label lb_trackduration;
+    private Button btn_addfile;
+    private PictureBox pb_audioart;
+    private Button btn_deletefile;
+    private Label lb_fileid;
+    private Label lb_listtype;
+    private Label lb_listpos;
 }
