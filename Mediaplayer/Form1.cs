@@ -9,6 +9,7 @@ using Mediaplayer.Playlists;
 using TagLib;
 using System.Security.Cryptography;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace Mediaplayer;
 
@@ -38,14 +39,14 @@ public partial class Form1 : Form
 
         // Set up the progress timer
         progressTimer = new System.Windows.Forms.Timer();
-        progressTimer.Interval = 500; // Update every 500ms
-        //progressTimer.Tick += ProgressTimer_Tick;
-        progressTimer.Start();
+        
 
         // Configure the timer
-        progressTimer.Interval = 1000; // Update every second
+        progressTimer.Interval = 500; // Update every 500 ms
         progressTimer.Tick += TimerProgress_Tick;
+        progressTimer.Start();
 
+        // Load button icons from the file system and configure button properties.
         btn_play_stop.Image = Image.FromFile(Environment.CurrentDirectory.Split("\\bin")[0] + "\\ButtonIcons\\play-24.png");
         btn_play_stop.AutoSize = true;
         btn_stop.Image = Image.FromFile(Environment.CurrentDirectory.Split("\\bin")[0] + "\\ButtonIcons\\stop-24.png");
@@ -58,41 +59,38 @@ public partial class Form1 : Form
         btn_addfile.AutoSize = true;
         btn_deletefile.Image = Image.FromFile(Environment.CurrentDirectory.Split("\\bin")[0] + "\\ButtonIcons\\x-mark-3-24.png");
         btn_deletefile.AutoSize = true;
-        //roundButton(btn_play_stop);
-
-        foreach (Audiolist audio in Datamanager.Instance.audios)
-        {
-            Console.WriteLine(audio.playlistid);
-            Console.WriteLine(audio.playlistname);
-            foreach (Mediafile file in audio.mediafiles)
-            {
-                Console.WriteLine(file.filename);
-            }
-        }
 
     }
 
+    // Play/Pause Button Click Event Handler
+    // This method toggles between playing and pausing the media.
     private void btn_play_stop_Click(object sender, EventArgs e)
     {
+        // If no media is loaded, show a message to the user.
         if (_mediaPlayer.Length == -1)
         {
             MessageBox.Show("No media loaded");
             return;
         }
+        // If media is playing, pause it; otherwise, play the media.
         if (_mediaPlayer.IsPlaying)
         {
+            // Update the button icon to indicate "play".
             _mediaPlayer.Pause();
             progressTimer.Stop();
             btn_play_stop.Image = Image.FromFile(Environment.CurrentDirectory.Split("\\bin")[0] + "\\ButtonIcons\\play-24.png");
         }
         else
         {
+            // Update the button icon to indicate "pause".
             _mediaPlayer.Play();
             progressTimer.Start();
             btn_play_stop.Image = Image.FromFile(Environment.CurrentDirectory.Split("\\bin")[0] + "\\ButtonIcons\\media-pause-24.png");
         }
     }
 
+    // Stop Button Click Event Handler
+    // Stops media playback, resets progress bar, and updates the UI.
     private void btn_stop_Click(object sender, EventArgs e)
     {
         _mediaPlayer.Stop();
@@ -106,6 +104,8 @@ public partial class Form1 : Form
         // Update the media player's volume with the TrackBar's current value.
         _mediaPlayer.Volume = tb_.Value;
     }
+    // Timer Tick Event Handler
+    // Updates the current playback time, total duration, and progress bar.
     private void TimerProgress_Tick(object sender, EventArgs e)
     {
         if (_mediaPlayer != null && _mediaPlayer.Media != null && _mediaPlayer.IsPlaying)
@@ -113,6 +113,7 @@ public partial class Form1 : Form
             long totalTime = _mediaPlayer.Length;  // Total length in milliseconds
             long currentTime = _mediaPlayer.Time;    // Current playback time in milliseconds
 
+            // Format the times as "mm:ss" and update the respective labels.
             string formattedCurrentTime = TimeSpan.FromMilliseconds(currentTime).ToString(@"mm\:ss");
             lb_currenttracktime.Text = $"{formattedCurrentTime}";
 
@@ -141,13 +142,16 @@ public partial class Form1 : Form
 
     }
 
-    // Optional: Allow user to seek by dragging the TrackBar
+    // Event handler for when the user clicks down on the progress TrackBar.
+    // Stops the timer to allow manual seeking without interference.
     private void tb_progress_MouseDown(object sender, MouseEventArgs e)
     {
         // Stop timer while dragging
         progressTimer.Stop();
     }
 
+    // Event handler for when the user releases the mouse button on the progress TrackBar.
+    // Sets the new media playback position based on the TrackBar's value and resumes the timer.
     private void tb_progress_MouseUp(object sender, MouseEventArgs e)
     {
         // Calculate new position based on trackbar value
@@ -156,6 +160,8 @@ public partial class Form1 : Form
         progressTimer.Start();
     }
 
+    // Opens an OpenFileDialog to allow the user to select an audio file.
+    // Plays the selected audio file and extracts album art if available.
     private void tsmi_audio_Click(object sender, EventArgs e)
     {
         OpenFileDialog ofd = new OpenFileDialog
@@ -177,7 +183,7 @@ public partial class Form1 : Form
             {
 
                 // Play the media file
-                this.Text = ofd.SafeFileName;
+                this.Text = ofd.SafeFileName; // Display the file name in the form's title bar
                 videoView1.MediaPlayer.Play(media);
                 btn_play_stop.Image = Image.FromFile(Environment.CurrentDirectory.Split("\\bin")[0] + "\\ButtonIcons\\media-pause-24.png");
 
@@ -210,7 +216,8 @@ public partial class Form1 : Form
         }
     }
 
-
+    // Opens an OpenFileDialog for video files, plays the selected video,
+    // and updates UI elements accordingly.
     private void tsmi_video_Click(object sender, EventArgs e)
     {
         OpenFileDialog ofd = new OpenFileDialog
@@ -242,6 +249,7 @@ public partial class Form1 : Form
         }
     }
 
+    // Opens an OpenFileDialog for image files and displays the selected image in a new form.
     private void tsmi_image_Click(object sender, EventArgs e)
     {
         OpenFileDialog ofd = new OpenFileDialog
@@ -264,10 +272,12 @@ public partial class Form1 : Form
         }
     }
 
+    // Handles adding a new audio playlist when the Enter key is pressed.
     private void tsmitb_audio_KeyUp(object sender, KeyEventArgs e)
     {
         if (e.KeyCode == Keys.Enter && tsmitb_audio.Text.Length != 0)
         {
+            // Add the new playlist using the Datamanager.
             Datamanager.Instance.AddPlaylistToDatabase(tsmitb_audio.Text, "Audio");
             MessageBox.Show("Playlist added");
             tsmitb_audio.Text = "";
@@ -283,6 +293,7 @@ public partial class Form1 : Form
         }
     }
 
+    // Handles adding a new video playlist when the Enter key is pressed.
     private void tsmitb_video_KeyUp(object sender, KeyEventArgs e)
     {
         if (e.KeyCode == Keys.Enter && tsmitb_video.Text.Length != 0)
@@ -302,6 +313,7 @@ public partial class Form1 : Form
         }
     }
 
+    // Handles adding a new image playlist when the Enter key is pressed.
     private void tsmitb_image_KeyUp(object sender, KeyEventArgs e)
     {
         if (e.KeyCode == Keys.Enter && tsmitb_image.Text.Length != 0)
@@ -322,20 +334,24 @@ public partial class Form1 : Form
 
     }
 
+    // When an audio playlist is selected, populate the ListView with its media files.
     private void tscb_audio_SelectedIndexChanged(object sender, EventArgs e)
     {
+        // Deselect video and image playlists
         tscb_video.SelectedIndex = -1;
         tscb_album.SelectedIndex = -1;
         lv_playlist.Items.Clear();
         if (tscb_audio.SelectedIndex != -1)
         {
+            // Update Hidden UI labels with the selected playlist details.
             lb_playlistid.Text = Datamanager.Instance.audios[tscb_audio.SelectedIndex].playlistid.ToString();
             lb_current_playlist.Text = Datamanager.Instance.audios[tscb_audio.SelectedIndex].playlistname;
+            // Populate the ListView with file names and durations.
             foreach (Mediafile file in Datamanager.Instance.audios[tscb_audio.SelectedIndex].mediafiles)
             {
                 var tagFile = TagLib.File.Create(file.filepath);
                 ListViewItem item = new ListViewItem(file.filename);
-                item.SubItems.Add(tagFile.Properties.Duration.ToString());
+                item.SubItems.Add(tagFile.Properties.Duration.ToString(@"mm\:ss"));
                 lv_playlist.Items.Add(item);
             }
             lb_listtype.Text = "Audio";
@@ -345,6 +361,7 @@ public partial class Form1 : Form
         }
     }
 
+    // When a video playlist is selected, populate the ListView with its media files.
     private void tscb_video_SelectedIndexChanged(object sender, EventArgs e)
     {
         tscb_audio.SelectedIndex = -1;
@@ -358,7 +375,7 @@ public partial class Form1 : Form
             {
                 var tagFile = TagLib.File.Create(file.filepath);
                 ListViewItem item = new ListViewItem(file.filename);
-                item.SubItems.Add(tagFile.Properties.Duration.ToString());
+                item.SubItems.Add(tagFile.Properties.Duration.ToString(@"mm\:ss"));
                 lv_playlist.Items.Add(item);
             }
             lb_listtype.Text = "Video";
@@ -367,11 +384,11 @@ public partial class Form1 : Form
         }
     }
 
+    // When an image playlist is selected, open a new form to display the images.
     private void tscb_album_SelectedIndexChanged(object sender, EventArgs e)
     {
         tscb_audio.SelectedIndex = -1;
         tscb_video.SelectedIndex = -1;
-        Console.WriteLine(tscb_album.SelectedIndex);
         if (tscb_album.SelectedIndex != -1)
         {
             Form2 form2 = new Form2(Datamanager.Instance.images[tscb_album.SelectedIndex], tscb_album.SelectedIndex);
@@ -379,6 +396,7 @@ public partial class Form1 : Form
         }
     }
 
+    // Enable the delete button if a file is selected in the playlist ListView.
     private void lv_playlist_SelectedIndexChanged(object sender, EventArgs e)
     {
         if (lv_playlist.SelectedItems.Count > 0)
@@ -391,15 +409,41 @@ public partial class Form1 : Form
             btn_deletefile.Enabled = false;
         }
     }
-
+    // When a media file in the playlist ListView is double-clicked,
+    // start playing that file and update the UI accordingly.
     private void lv_playlist_DoubleClick(object sender, EventArgs e)
     {
+
         if (lb_listtype.Text.Equals("Audio"))
         {
             _mediaPlayer.Stop();
             _mediaPlayer.Play(new Media(_libVlc, Datamanager.Instance.audios[Convert.ToInt32(lb_listpos.Text)].mediafiles[lv_playlist.SelectedItems[0].Index].filepath, FromType.FromPath));
             progressTimer.Start();
             btn_play_stop.Image = Image.FromFile(Environment.CurrentDirectory.Split("\\bin")[0] + "\\ButtonIcons\\media-pause-24.png");
+            this.Text = Datamanager.Instance.audios[Convert.ToInt32(lb_listpos.Text)].mediafiles[lv_playlist.SelectedItems[0].Index].filename;
+            // Update album art for the new audio file.
+            try
+            {
+                var tagFile = TagLib.File.Create(Datamanager.Instance.audios[Convert.ToInt32(lb_listpos.Text)].mediafiles[lv_playlist.SelectedItems[0].Index].filepath);
+                if (tagFile.Tag.Pictures.Length > 0)
+                {
+                    var picData = tagFile.Tag.Pictures[0].Data.Data;
+                    using (var ms = new MemoryStream(picData))
+                    {
+                        pb_audioart.Image = Image.FromStream(ms);
+                        pb_audioart.Visible = true;
+                        pb_audioart.BackColor = Color.Black;
+                    }
+                }
+                else
+                {
+                    pb_audioart.Image = null; // Or set a default image
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error extracting album art: " + ex.Message);
+            }
         }
         else if (lb_listtype.Text.Equals("Video"))
         {
@@ -407,13 +451,17 @@ public partial class Form1 : Form
             _mediaPlayer.Play(new Media(_libVlc, Datamanager.Instance.videos[Convert.ToInt32(lb_listpos.Text)].mediafiles[lv_playlist.SelectedItems[0].Index].filepath, FromType.FromPath));
             progressTimer.Start();
             btn_play_stop.Image = Image.FromFile(Environment.CurrentDirectory.Split("\\bin")[0] + "\\ButtonIcons\\media-pause-24.png");
+            pb_audioart.Visible = false;
+            this.Text = Datamanager.Instance.videos[Convert.ToInt32(lb_listpos.Text)].mediafiles[lv_playlist.SelectedItems[0].Index].filename;
         }
     }
 
+    // Allows the user to add a new media file to the currently selected playlist.
     private void btn_addfile_Click(object sender, EventArgs e)
     {
         if (lb_listtype.Text.Equals("Audio"))
         {
+            // Open a file dialog to select an audio file.
             OpenFileDialog ofd = new OpenFileDialog
             {
                 InitialDirectory = @Environment.GetFolderPath(Environment.SpecialFolder.MyMusic),
@@ -428,21 +476,29 @@ public partial class Form1 : Form
             };
             if (ofd.ShowDialog() == DialogResult.OK)
             {
+                // Add the selected audio file to the database.
                 Datamanager.Instance.addFile(ofd.SafeFileName, ofd.FileName, "Audio", Convert.ToInt32(lb_playlistid.Text));
                 MessageBox.Show("File added");
                 lv_playlist.Items.Clear();
                 loadLists();
+                // Repopulate the ListView with the updated list of audio files.
                 foreach (Mediafile file in Datamanager.Instance.audios[Convert.ToInt32(lb_listpos.Text)].mediafiles)
                 {
-                    lv_playlist.Items.Add(file.filename);
+                    
+                    var tagFile = TagLib.File.Create(file.filepath);
+                    ListViewItem item = new ListViewItem(file.filename);
+                    item.SubItems.Add(tagFile.Properties.Duration.ToString(@"mm\:ss"));
+                    lv_playlist.Items.Add(item);
+                    
                 }
 
-                var tagFile = TagLib.File.Create(ofd.FileName);
+                
             }
         }
 
         else if (lb_listtype.Text.Equals("Video"))
         {
+            // Open a file dialog to select a video file.
             OpenFileDialog ofd = new OpenFileDialog
             {
                 InitialDirectory = @Environment.GetFolderPath(Environment.SpecialFolder.MyVideos),
@@ -457,38 +513,48 @@ public partial class Form1 : Form
             };
             if (ofd.ShowDialog() == DialogResult.OK)
             {
+                // Add the selected video file to the database.
                 Datamanager.Instance.addFile(ofd.SafeFileName, ofd.FileName, "Video", Convert.ToInt32(lb_playlistid.Text));
                 MessageBox.Show("File added");
                 lv_playlist.Items.Clear();
                 loadLists();
+                // Repopulate the ListView with the updated list of video files.
                 foreach (Mediafile file in Datamanager.Instance.videos[Convert.ToInt32(lb_listpos.Text)].mediafiles)
                 {
-                    lv_playlist.Items.Add(file.filename);
+                    var tagFile = TagLib.File.Create(file.filepath);
+                    ListViewItem item = new ListViewItem(file.filename);
+                    item.SubItems.Add(tagFile.Properties.Duration.ToString());
+                    lv_playlist.Items.Add(item);
+
                 }
             }
         }
     }
-
+    // Deletes the selected media file from the current playlist.
     private void btn_deletefile_Click(object sender, EventArgs e)
     {
         if (lb_listtype.Text.Equals("Audio"))
         {
+            // Delete the audio file from the database.
             Datamanager.Instance.deleteFile(Datamanager.Instance.audios[Convert.ToInt32(lb_listpos.Text)].mediafiles[lv_playlist.SelectedItems[0].Index].fileid);
             lv_playlist.Items.Clear();
             loadLists();
             foreach (Mediafile file in Datamanager.Instance.audios[Convert.ToInt32(lb_listpos.Text)].mediafiles)
             {
+                // Repopulate the ListView with the updated list of audio files.
                 var tagFile = TagLib.File.Create(file.filepath);
                 ListViewItem item = new ListViewItem(file.filename);
-                item.SubItems.Add(tagFile.Properties.Duration.ToString());
+                item.SubItems.Add(tagFile.Properties.Duration.ToString(@"mm\:ss"));
                 lv_playlist.Items.Add(item);
             }
         }
         else if (lb_listtype.Text.Equals("Video"))
         {
+            // Delete the video file from the database.
             Datamanager.Instance.deleteFile(Datamanager.Instance.videos[Convert.ToInt32(lb_listpos.Text)].mediafiles[lv_playlist.SelectedItems[0].Index].fileid);
             lv_playlist.Items.Clear();
             loadLists();
+            // Repopulate the ListView with the updated list of video files.
             foreach (Mediafile file in Datamanager.Instance.videos[Convert.ToInt32(lb_listpos.Text)].mediafiles)
             {
                 var tagFile = TagLib.File.Create(file.filepath);
@@ -499,7 +565,7 @@ public partial class Form1 : Form
         }
 
     }
-
+    // Opens a dialog to delete an entire playlist.
     private void tsmi_delete_playlist_Click(object sender, EventArgs e)
     {
         Form3 form3 = new Form3();
@@ -510,7 +576,7 @@ public partial class Form1 : Form
 
         }
     }
-
+    // Reloads playlists and updates the ComboBoxes and ListView.
     private void loadLists()
     {
         Datamanager.Instance.loadLists();
@@ -518,6 +584,7 @@ public partial class Form1 : Form
         tscb_video.Items.Clear();
         tscb_album.Items.Clear();
         lv_playlist.Items.Clear();
+        // Populate audio playlists.
         if (Datamanager.Instance.audios != null)
         {
             foreach (Audiolist audio in Datamanager.Instance.audios)
@@ -525,6 +592,7 @@ public partial class Form1 : Form
                 tscb_audio.Items.Add(audio.playlistname);
             }
         }
+        // Populate video playlists.
         if (Datamanager.Instance.videos != null)
         {
             foreach (Videolist video in Datamanager.Instance.videos)
@@ -532,6 +600,7 @@ public partial class Form1 : Form
                 tscb_video.Items.Add(video.playlistname);
             }
         }
+        // Populate image playlists.
         if (Datamanager.Instance.images != null)
         {
             foreach (Imagelist image in Datamanager.Instance.images)
@@ -540,7 +609,7 @@ public partial class Form1 : Form
             }
         }
     }
-
+    // Navigate to the previous media file in the playlist.
     private void btn_previous_Click(object sender, EventArgs e)
     {
         if (lv_playlist.Items.Count > 0)
@@ -560,6 +629,30 @@ public partial class Form1 : Form
                         btn_play_stop.Image = Image.FromFile(Environment.CurrentDirectory.Split("\\bin")[0] + "\\ButtonIcons\\media-pause-24.png");
                         lv_playlist.Items[index + 1].Selected = false;
                         lv_playlist.Items[index].Selected = true;
+                        this.Text = Datamanager.Instance.audios[Convert.ToInt32(lb_listpos.Text)].mediafiles[index].filename;
+                        // Update album art for the new audio file.
+                        try
+                        {
+                            var tagFile = TagLib.File.Create(Datamanager.Instance.audios[Convert.ToInt32(lb_listpos.Text)].mediafiles[index].filepath);
+                            if (tagFile.Tag.Pictures.Length > 0)
+                            {
+                                var picData = tagFile.Tag.Pictures[0].Data.Data;
+                                using (var ms = new MemoryStream(picData))
+                                {
+                                    pb_audioart.Image = Image.FromStream(ms);
+                                    pb_audioart.Visible = true;
+                                    pb_audioart.BackColor = Color.Black;
+                                }
+                            }
+                            else
+                            {
+                                pb_audioart.Image = null; // Or set a default image
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Error extracting album art: " + ex.Message);
+                        }
                     }
                     else if (lb_listtype.Text.Equals("Video"))
                     {
@@ -569,12 +662,14 @@ public partial class Form1 : Form
                         btn_play_stop.Image = Image.FromFile(Environment.CurrentDirectory.Split("\\bin")[0] + "\\ButtonIcons\\media-pause-24.png");
                         lv_playlist.Items[index + 1].Selected = false;
                         lv_playlist.Items[index].Selected = true;
+                        pb_audioart.Visible = false;
+                        this.Text = Datamanager.Instance.videos[Convert.ToInt32(lb_listpos.Text)].mediafiles[index].filename;
                     }
                 }
             }
         }
     }
-
+    // Navigate to the next media file in the playlist.
     private void btn_next_Click(object sender, EventArgs e)
     {
         if (lv_playlist.Items.Count > 0)
@@ -594,6 +689,30 @@ public partial class Form1 : Form
                         btn_play_stop.Image = Image.FromFile(Environment.CurrentDirectory.Split("\\bin")[0] + "\\ButtonIcons\\media-pause-24.png");
                         lv_playlist.Items[index - 1].Selected = false;
                         lv_playlist.Items[index].Selected = true;
+                        this.Text = Datamanager.Instance.audios[Convert.ToInt32(lb_listpos.Text)].mediafiles[index].filename;
+                        // Update album art for the new audio file.
+                        try
+                        {
+                            var tagFile = TagLib.File.Create(Datamanager.Instance.audios[Convert.ToInt32(lb_listpos.Text)].mediafiles[index].filepath);
+                            if (tagFile.Tag.Pictures.Length > 0)
+                            {
+                                var picData = tagFile.Tag.Pictures[0].Data.Data;
+                                using (var ms = new MemoryStream(picData))
+                                {
+                                    pb_audioart.Image = Image.FromStream(ms);
+                                    pb_audioart.Visible = true;
+                                    pb_audioart.BackColor = Color.Black;
+                                }
+                            }
+                            else
+                            {
+                                pb_audioart.Image = null; // Or set a default image
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Error extracting album art: " + ex.Message);
+                        }
                     }
                     else if (lb_listtype.Text.Equals("Video"))
                     {
@@ -603,6 +722,8 @@ public partial class Form1 : Form
                         btn_play_stop.Image = Image.FromFile(Environment.CurrentDirectory.Split("\\bin")[0] + "\\ButtonIcons\\media-pause-24.png");
                         lv_playlist.Items[index - 1].Selected = false;
                         lv_playlist.Items[index].Selected = true;
+                        pb_audioart.Visible = false;
+                        this.Text = Datamanager.Instance.videos[Convert.ToInt32(lb_listpos.Text)].mediafiles[index].filename;
                     }
                 }
 

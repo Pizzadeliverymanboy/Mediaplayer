@@ -33,7 +33,7 @@ namespace Mediaplayer
             myImage = Image.FromFile(path);
 
             btn_rotate.Image = Image.FromFile(Environment.CurrentDirectory.Split("\\bin")[0] + "\\ButtonIcons\\anticlockwise-2-24.png");
-
+            this.Text = Path.GetFileName(path);
 
             //this.ClientSize = new Size(800, 450);
             //this.Width = 1000;
@@ -137,6 +137,7 @@ namespace Mediaplayer
                             }
                             // Load the image.
                             myImage = Image.FromFile(Datamanager.Instance.images[imagelistpos].mediafiles[index].filepath);
+                            this.Text = Datamanager.Instance.images[imagelistpos].mediafiles[lv_album.SelectedItems[0].Index].filename;
                             // Force the form to redraw, which will call OnPaint.
                             this.Invalidate();
                         }
@@ -170,6 +171,7 @@ namespace Mediaplayer
                             }
                             // Load the image.
                             myImage = Image.FromFile(Datamanager.Instance.images[imagelistpos].mediafiles[index].filepath);
+                            this.Text = Datamanager.Instance.images[imagelistpos].mediafiles[lv_album.SelectedItems[0].Index].filename;
                             // Force the form to redraw, which will call OnPaint.
                             this.Invalidate();
                         }
@@ -239,7 +241,7 @@ namespace Mediaplayer
                     }
                     // Load the image.
                     myImage = Image.FromFile(Datamanager.Instance.images[imagelistpos].mediafiles[lv_album.SelectedItems[0].Index].filepath);
-
+                    this.Text = Datamanager.Instance.images[imagelistpos].mediafiles[lv_album.SelectedItems[0].Index].filename;
                     var tagFile = TagLib.File.Create(Datamanager.Instance.images[imagelistpos].mediafiles[lv_album.SelectedItems[0].Index].filepath);
                     
                     // Force the form to redraw, which will call OnPaint.

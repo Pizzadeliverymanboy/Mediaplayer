@@ -148,9 +148,9 @@ public class DatabaseHandler
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.Add("@filename", SqlDbType.VarChar);
+                    command.Parameters.Add("@filename", SqlDbType.NVarChar);
                     command.Parameters["@filename"].Value = filename;
-                    command.Parameters.Add("@filepath", SqlDbType.VarChar);
+                    command.Parameters.Add("@filepath", SqlDbType.NVarChar);
                     command.Parameters["@filepath"].Value = filepath;
                     command.Parameters.Add("@filetype", SqlDbType.VarChar);
                     command.Parameters["@filetype"].Value = filetype;
