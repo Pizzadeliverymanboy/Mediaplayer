@@ -30,7 +30,7 @@ partial class Form1
     private void InitializeComponent()
     {
         videoView1 = new LibVLCSharp.WinForms.VideoView();
-        groupBox1 = new GroupBox();
+        gb_playbuttons = new GroupBox();
         btn_next = new Button();
         btn_previous = new Button();
         btn_stop = new Button();
@@ -71,7 +71,7 @@ partial class Form1
         lb_listtype = new Label();
         lb_listpos = new Label();
         ((System.ComponentModel.ISupportInitialize)videoView1).BeginInit();
-        groupBox1.SuspendLayout();
+        gb_playbuttons.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)tb_).BeginInit();
         ((System.ComponentModel.ISupportInitialize)tb_progress).BeginInit();
         menuStrip1.SuspendLayout();
@@ -87,18 +87,18 @@ partial class Form1
         videoView1.Size = new Size(692, 508);
         videoView1.TabIndex = 3;
         // 
-        // groupBox1
+        // gb_playbuttons
         // 
-        groupBox1.Controls.Add(btn_next);
-        groupBox1.Controls.Add(btn_previous);
-        groupBox1.Controls.Add(btn_stop);
-        groupBox1.Controls.Add(btn_play_stop);
-        groupBox1.Location = new Point(272, 662);
-        groupBox1.Name = "groupBox1";
-        groupBox1.Size = new Size(416, 74);
-        groupBox1.TabIndex = 5;
-        groupBox1.TabStop = false;
-        groupBox1.Text = "groupBox1";
+        gb_playbuttons.BackColor = Color.DarkOrange;
+        gb_playbuttons.Controls.Add(btn_next);
+        gb_playbuttons.Controls.Add(btn_previous);
+        gb_playbuttons.Controls.Add(btn_stop);
+        gb_playbuttons.Controls.Add(btn_play_stop);
+        gb_playbuttons.Location = new Point(283, 695);
+        gb_playbuttons.Name = "gb_playbuttons";
+        gb_playbuttons.Size = new Size(416, 74);
+        gb_playbuttons.TabIndex = 5;
+        gb_playbuttons.TabStop = false;
         // 
         // btn_next
         // 
@@ -148,7 +148,7 @@ partial class Form1
         // 
         tb_.BackColor = Color.DarkOrange;
         tb_.LargeChange = 1;
-        tb_.Location = new Point(716, 635);
+        tb_.Location = new Point(782, 635);
         tb_.Maximum = 100;
         tb_.Name = "tb_";
         tb_.Orientation = Orientation.Vertical;
@@ -296,9 +296,9 @@ partial class Form1
         // 
         // tscb_audio
         // 
-        tscb_audio.DropDownStyle = ComboBoxStyle.DropDownList;
+        tscb_audio.DropDownStyle = ComboBoxStyle.Simple;
         tscb_audio.Name = "tscb_audio";
-        tscb_audio.Size = new Size(121, 28);
+        tscb_audio.Size = new Size(121, 150);
         tscb_audio.SelectedIndexChanged += tscb_audio_SelectedIndexChanged;
         // 
         // tsmi_videolists
@@ -310,9 +310,9 @@ partial class Form1
         // 
         // tscb_video
         // 
-        tscb_video.DropDownStyle = ComboBoxStyle.DropDownList;
+        tscb_video.DropDownStyle = ComboBoxStyle.Simple;
         tscb_video.Name = "tscb_video";
-        tscb_video.Size = new Size(121, 28);
+        tscb_video.Size = new Size(121, 150);
         tscb_video.SelectedIndexChanged += tscb_video_SelectedIndexChanged;
         // 
         // tsmi_album
@@ -324,9 +324,10 @@ partial class Form1
         // 
         // tscb_album
         // 
-        tscb_album.DropDownStyle = ComboBoxStyle.DropDownList;
+        tscb_album.DropDownStyle = ComboBoxStyle.Simple;
         tscb_album.Name = "tscb_album";
-        tscb_album.Size = new Size(121, 28);
+        tscb_album.Size = new Size(121, 150);
+        tscb_album.SelectedIndexChanged += tscb_album_SelectedIndexChanged;
         // 
         // lb_playlistname
         // 
@@ -376,13 +377,14 @@ partial class Form1
         // 
         // btn_addfile
         // 
+        btn_addfile.BackColor = Color.Black;
         btn_addfile.Enabled = false;
-        btn_addfile.Location = new Point(932, 596);
+        btn_addfile.FlatStyle = FlatStyle.Popup;
+        btn_addfile.Location = new Point(967, 596);
         btn_addfile.Name = "btn_addfile";
-        btn_addfile.Size = new Size(94, 29);
+        btn_addfile.Size = new Size(31, 29);
         btn_addfile.TabIndex = 16;
-        btn_addfile.Text = "add";
-        btn_addfile.UseVisualStyleBackColor = true;
+        btn_addfile.UseVisualStyleBackColor = false;
         btn_addfile.Click += btn_addfile_Click;
         // 
         // pb_audioart
@@ -398,14 +400,15 @@ partial class Form1
         // 
         // btn_deletefile
         // 
+        btn_deletefile.BackColor = Color.Black;
         btn_deletefile.Enabled = false;
-        btn_deletefile.Location = new Point(1062, 596);
+        btn_deletefile.FlatStyle = FlatStyle.Popup;
+        btn_deletefile.Location = new Point(1109, 596);
         btn_deletefile.Name = "btn_deletefile";
-        btn_deletefile.Size = new Size(94, 29);
+        btn_deletefile.Size = new Size(31, 29);
         btn_deletefile.TabIndex = 18;
         btn_deletefile.TabStop = false;
-        btn_deletefile.Text = "delete";
-        btn_deletefile.UseVisualStyleBackColor = true;
+        btn_deletefile.UseVisualStyleBackColor = false;
         btn_deletefile.Click += btn_deletefile_Click;
         // 
         // lb_fileid
@@ -457,7 +460,7 @@ partial class Form1
         Controls.Add(lb_playlistname);
         Controls.Add(lv_playlist);
         Controls.Add(tb_);
-        Controls.Add(groupBox1);
+        Controls.Add(gb_playbuttons);
         Controls.Add(videoView1);
         Controls.Add(tb_progress);
         Controls.Add(menuStrip1);
@@ -465,7 +468,7 @@ partial class Form1
         Name = "Form1";
         Text = "Mediaplayer";
         ((System.ComponentModel.ISupportInitialize)videoView1).EndInit();
-        groupBox1.ResumeLayout(false);
+        gb_playbuttons.ResumeLayout(false);
         ((System.ComponentModel.ISupportInitialize)tb_).EndInit();
         ((System.ComponentModel.ISupportInitialize)tb_progress).EndInit();
         menuStrip1.ResumeLayout(false);
@@ -484,7 +487,7 @@ partial class Form1
     #endregion
 
     private LibVLCSharp.WinForms.VideoView videoView1;
-    private System.Windows.Forms.GroupBox groupBox1;
+    private System.Windows.Forms.GroupBox gb_playbuttons;
     private Button btn_play_stop;
     private Button btn_next;
     private Button btn_previous;

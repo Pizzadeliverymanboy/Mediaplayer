@@ -54,6 +54,10 @@ public partial class Form1 : Form
         btn_previous.AutoSize = true;
         btn_next.Image = Image.FromFile(Environment.CurrentDirectory.Split("\\bin")[0] + "\\ButtonIcons\\next-24.png");
         btn_next.AutoSize = true;
+        btn_addfile.Image = Image.FromFile(Environment.CurrentDirectory.Split("\\bin")[0] + "\\ButtonIcons\\add-file-24.png");
+        btn_addfile.AutoSize = true;
+        btn_deletefile.Image = Image.FromFile(Environment.CurrentDirectory.Split("\\bin")[0] + "\\ButtonIcons\\x-mark-3-24.png");
+        btn_deletefile.AutoSize = true;
         //roundButton(btn_play_stop);
 
         foreach (Audiolist audio in Datamanager.Instance.audios)
@@ -173,6 +177,7 @@ public partial class Form1 : Form
             {
 
                 // Play the media file
+                this.Text = ofd.SafeFileName;
                 videoView1.MediaPlayer.Play(media);
                 btn_play_stop.Image = Image.FromFile(Environment.CurrentDirectory.Split("\\bin")[0] + "\\ButtonIcons\\media-pause-24.png");
 
@@ -244,7 +249,7 @@ public partial class Form1 : Form
             InitialDirectory = @Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),
             CheckFileExists = true,
             CheckPathExists = true,
-            DefaultExt = ".mp3",
+            DefaultExt = ".jpg",
             Filter = "Image Files (*.jpg;*.png;*.gif)|*.jpg;*.png;*.gif",
             FilterIndex = 2,
             RestoreDirectory = true,
@@ -319,12 +324,11 @@ public partial class Form1 : Form
 
     private void tscb_audio_SelectedIndexChanged(object sender, EventArgs e)
     {
-
+        tscb_video.SelectedIndex = -1;
+        tscb_album.SelectedIndex = -1;
         lv_playlist.Items.Clear();
-        Console.WriteLine(tscb_audio.SelectedIndex);
         if (tscb_audio.SelectedIndex != -1)
         {
-            Console.WriteLine(tscb_audio.SelectedIndex);
             lb_playlistid.Text = Datamanager.Instance.audios[tscb_audio.SelectedIndex].playlistid.ToString();
             lb_current_playlist.Text = Datamanager.Instance.audios[tscb_audio.SelectedIndex].playlistname;
             foreach (Mediafile file in Datamanager.Instance.audios[tscb_audio.SelectedIndex].mediafiles)
@@ -343,6 +347,7 @@ public partial class Form1 : Form
 
     private void tscb_video_SelectedIndexChanged(object sender, EventArgs e)
     {
+        tscb_audio.SelectedIndex = -1;
         tscb_album.SelectedIndex = -1;
         lv_playlist.Items.Clear();
         if (tscb_video.SelectedIndex != -1)
@@ -362,20 +367,24 @@ public partial class Form1 : Form
         }
     }
 
+    private void tscb_album_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        tscb_audio.SelectedIndex = -1;
+        tscb_video.SelectedIndex = -1;
+        Console.WriteLine(tscb_album.SelectedIndex);
+        if (tscb_album.SelectedIndex != -1)
+        {
+            Form2 form2 = new Form2(Datamanager.Instance.images[tscb_album.SelectedIndex], tscb_album.SelectedIndex);
+            form2.Show();
+        }
+    }
+
     private void lv_playlist_SelectedIndexChanged(object sender, EventArgs e)
     {
         if (lv_playlist.SelectedItems.Count > 0)
         {
             btn_deletefile.Enabled = true;
-            if (lb_listtype.Text.Equals("Audio"))
-            {
-
-            }
-            else if (lb_listtype.Text.Equals("Video"))
-            {
-
-            }
-
+            
         }
         else
         {
@@ -536,31 +545,30 @@ public partial class Form1 : Form
     {
         if (lv_playlist.Items.Count > 0)
         {
-            if (lb_listtype.Text.Equals("Audio"))
+            if (lv_playlist.SelectedItems.Count > 0)
             {
-                if (lv_playlist.SelectedItems.Count > 0)
+                int index = lv_playlist.SelectedItems[0].Index - 1;
+                Console.WriteLine(lv_playlist.Items.Count);
+                if (index > -1)
                 {
-                    if (lv_playlist.SelectedItems[0].Index > 0)
+                    if (lb_listtype.Text.Equals("Audio"))
                     {
+
                         _mediaPlayer.Stop();
-                        _mediaPlayer.Play(new Media(_libVlc, Datamanager.Instance.audios[Convert.ToInt32(lb_listpos.Text)].mediafiles[lv_playlist.SelectedItems[0].Index - 1].filepath, FromType.FromPath));
+                        _mediaPlayer.Play(new Media(_libVlc, Datamanager.Instance.audios[Convert.ToInt32(lb_listpos.Text)].mediafiles[index].filepath, FromType.FromPath));
                         progressTimer.Start();
                         btn_play_stop.Image = Image.FromFile(Environment.CurrentDirectory.Split("\\bin")[0] + "\\ButtonIcons\\media-pause-24.png");
-                        lv_playlist.Items[lv_playlist.SelectedItems[0].Index - 1].Selected = true;
+                        lv_playlist.Items[index + 1].Selected = false;
+                        lv_playlist.Items[index].Selected = true;
                     }
-                }
-            }
-            else if (lb_listtype.Text.Equals("Video"))
-            {
-                if (lv_playlist.SelectedItems.Count > 0)
-                {
-                    if (lv_playlist.SelectedItems[0].Index > 0)
+                    else if (lb_listtype.Text.Equals("Video"))
                     {
                         _mediaPlayer.Stop();
-                        _mediaPlayer.Play(new Media(_libVlc, Datamanager.Instance.videos[Convert.ToInt32(lb_listpos.Text)].mediafiles[lv_playlist.SelectedItems[0].Index - 1].filepath, FromType.FromPath));
+                        _mediaPlayer.Play(new Media(_libVlc, Datamanager.Instance.videos[Convert.ToInt32(lb_listpos.Text)].mediafiles[index].filepath, FromType.FromPath));
                         progressTimer.Start();
                         btn_play_stop.Image = Image.FromFile(Environment.CurrentDirectory.Split("\\bin")[0] + "\\ButtonIcons\\media-pause-24.png");
-                        lv_playlist.Items[lv_playlist.SelectedItems[0].Index - 1].Selected = true;
+                        lv_playlist.Items[index + 1].Selected = false;
+                        lv_playlist.Items[index].Selected = true;
                     }
                 }
             }
@@ -569,39 +577,36 @@ public partial class Form1 : Form
 
     private void btn_next_Click(object sender, EventArgs e)
     {
-        if(lv_playlist.Items.Count > 0)
+        if (lv_playlist.Items.Count > 0)
         {
-            Console.WriteLine(lv_playlist.Items.Count);
-            if (lb_listtype.Text.Equals("Audio"))
+            if (lv_playlist.SelectedItems.Count > 0)
             {
-                Console.WriteLine(lb_listtype.Text);
-                if (lv_playlist.SelectedItems.Count > 0)
-                {Console.WriteLine(lv_playlist.SelectedItems.Count);
-                    if (lv_playlist.SelectedItems[0].Index < lv_playlist.Items.Count - 1)
-                    {
-                        Console.WriteLine(lv_playlist.SelectedItems[0].Index);
-                        Console.WriteLine(lv_playlist.Items.Count - 1);
-                        _mediaPlayer.Stop();
-                        _mediaPlayer.Play(new Media(_libVlc, Datamanager.Instance.audios[Convert.ToInt32(lb_listpos.Text)].mediafiles[lv_playlist.SelectedItems[0].Index + 1].filepath, FromType.FromPath));
-                        progressTimer.Start();
-                        btn_play_stop.Image = Image.FromFile(Environment.CurrentDirectory.Split("\\bin")[0] + "\\ButtonIcons\\media-pause-24.png");
-                        lv_playlist.Items[lv_playlist.SelectedItems[0].Index + 1].Selected = true;
-                    }
-                }
-            }
-            else if (lb_listtype.Text.Equals("Video"))
-            {
-                if (lv_playlist.SelectedItems.Count > 0)
+                int index = lv_playlist.SelectedItems[0].Index + 1;
+                Console.WriteLine(lv_playlist.Items.Count);
+                if (index < lv_playlist.Items.Count)
                 {
-                    if (lv_playlist.SelectedItems[0].Index < lv_playlist.Items.Count - 1)
+                    if (lb_listtype.Text.Equals("Audio"))
                     {
+
                         _mediaPlayer.Stop();
-                        _mediaPlayer.Play(new Media(_libVlc, Datamanager.Instance.videos[Convert.ToInt32(lb_listpos.Text)].mediafiles[lv_playlist.SelectedItems[0].Index + 1].filepath, FromType.FromPath));
+                        _mediaPlayer.Play(new Media(_libVlc, Datamanager.Instance.audios[Convert.ToInt32(lb_listpos.Text)].mediafiles[index].filepath, FromType.FromPath));
                         progressTimer.Start();
                         btn_play_stop.Image = Image.FromFile(Environment.CurrentDirectory.Split("\\bin")[0] + "\\ButtonIcons\\media-pause-24.png");
-                        lv_playlist.Items[lv_playlist.SelectedItems[0].Index + 1].Selected = true;
+                        lv_playlist.Items[index - 1].Selected = false;
+                        lv_playlist.Items[index].Selected = true;
+                    }
+                    else if (lb_listtype.Text.Equals("Video"))
+                    {
+                        _mediaPlayer.Stop();
+                        _mediaPlayer.Play(new Media(_libVlc, Datamanager.Instance.videos[Convert.ToInt32(lb_listpos.Text)].mediafiles[index].filepath, FromType.FromPath));
+                        progressTimer.Start();
+                        btn_play_stop.Image = Image.FromFile(Environment.CurrentDirectory.Split("\\bin")[0] + "\\ButtonIcons\\media-pause-24.png");
+                        lv_playlist.Items[index - 1].Selected = false;
+                        lv_playlist.Items[index].Selected = true;
                     }
                 }
+
+
             }
         }
     }
