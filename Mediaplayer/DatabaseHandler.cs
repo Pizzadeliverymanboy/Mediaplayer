@@ -84,7 +84,8 @@ public class DatabaseHandler
             throw;
         }
     }
-    
+    // Method to Get Playlists from Database
+    // Adds the playlists to the datamanager
     public void GetPlaylists()
     {
         string query = "SELECT * FROM Playlist;";
@@ -110,19 +111,21 @@ public class DatabaseHandler
                 
             }
 
+            // Loop through the result table and add the playlists to the datamanager
             foreach (DataRow row in resultTable.Rows)
             {
-                
+
+                // Check the playlisttype and add the playlist to the datamanager
                 switch ((string)row["playlisttype"])
                 {
                     case "Audio":
-                        Datamanager.Instance.addAudioList(new Audiolist((int)row["playlistid"], (string)row["playlistname"], getMediaFiles((int)row["playlistid"], (string)row["playlisttype"])));
+                        Datamanager.Instance.AddAudioList(new Audiolist((int)row["playlistid"], (string)row["playlistname"], getMediaFiles((int)row["playlistid"], (string)row["playlisttype"])));
                         break;
                     case "Video":
-                        Datamanager.Instance.addVideoList(new Videolist((int)row["playlistid"], (string)row["playlistname"], getMediaFiles((int)row["playlistid"], (string)row["playlisttype"])));
+                        Datamanager.Instance.AddVideoList(new Videolist((int)row["playlistid"], (string)row["playlistname"], getMediaFiles((int)row["playlistid"], (string)row["playlisttype"])));
                         break;
                     case "Image":
-                        Datamanager.Instance.addImageList(new Imagelist((int)row["playlistid"], (string)row["playlistname"], getMediaFiles((int)row["playlistid"], (string)row["playlisttype"])));
+                        Datamanager.Instance.AddImageList(new Imagelist((int)row["playlistid"], (string)row["playlistname"], getMediaFiles((int)row["playlistid"], (string)row["playlisttype"])));
                         break;
                 }
                 
@@ -134,7 +137,8 @@ public class DatabaseHandler
             throw;
         }
     }
-    
+
+    // Method to Add File to Database
     public void AddFile(string filename, string filepath, string filetype, int playlistid)
     {
         string query = "INSERT INTO Mediafiles(filename, filepath, filetype, playlistid) VALUES (@filename, @filepath, @filetype, @playlistid)";
@@ -167,7 +171,8 @@ public class DatabaseHandler
             throw;
         }
     }
-    
+
+    // Method to Delete File to Database
     public void DeleteFile(int fileid)
     {
         string query = "DELETE FROM Mediafiles WHERE fileid = @fileid";
@@ -195,6 +200,8 @@ public class DatabaseHandler
         }
     }
 
+    // Method to Get Mediafiles from Database
+    // Returns a list of mediafiles
     public List<Mediafile> getMediaFiles(int playlistid, string playlisttype)
     {
         string query = "SELECT * FROM Mediafiles WHERE playlistid = @playlistid;";
@@ -221,9 +228,9 @@ public class DatabaseHandler
                 }
 
             }
-
+            // List to store the mediafiles
             List<Mediafile> mediafiles = new List<Mediafile>();
-
+            // Loop through the result table and add the mediafiles to the list
             foreach (DataRow row in resultTable.Rows)
             {
                 mediafiles.Add(new Mediafile((int)row["fileid"], (string)row["filename"], (string)row["filepath"],

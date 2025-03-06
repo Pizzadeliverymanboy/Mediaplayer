@@ -23,34 +23,41 @@ public class Datamanager
             return _instance;
         }
     }
-
+    // Properties
+    // Lists of audio, video, and image playlists
     public List<Audiolist> audios { get; private set; } = new List<Audiolist>();
     public List<Videolist> videos { get; private set; } = new List<Videolist>();
     public List<Imagelist> images { get;private set; } = new List<Imagelist>();
 
+    // Property to check if a playlist was deleted
     public bool playlistDelete { get; private set; } = false;
 
+    // Method to add a playlist to the database
     public void AddPlaylistToDatabase(string playlistname, string playlisttype)
     {
         DatabaseHandler.Instance.AddPlaylist(playlistname, playlisttype);
     }
 
-    public void addAudioList(Audiolist audio)
+    // Method to add an audio playlist to the list
+    public void AddAudioList(Audiolist audio)
     {
         this.audios.Add(audio);
     }
 
-    public void addVideoList(Videolist video)
+    // Method to add a video playlist to the list
+    public void AddVideoList(Videolist video)
     {
         this.videos.Add(video);
     }
 
-    public void addImageList(Imagelist image)
+    // Method to add an image playlist to the list
+    public void AddImageList(Imagelist image)
     {
         this.images.Add(image);
     }
-    
-    public void loadLists()
+
+    // Method to load playlists from the database
+    public void LoadLists()
     {
         this.audios.Clear();
         this.videos.Clear();
@@ -58,21 +65,28 @@ public class Datamanager
         DatabaseHandler.Instance.GetPlaylists();
     }
 
-    public void addFile(string filename, string filepath, string filetype, int playlistid)
+    // Method to add a file to the database
+    public void AddFile(string filename, string filepath, string filetype, int playlistid)
     {
         DatabaseHandler.Instance.AddFile(filename, filepath, filetype, playlistid);
     }
 
-    public void deleteFile(int mediafileid)
+    // Method to delete a file from the database
+    public void DeleteFile(int mediafileid)
     {
         DatabaseHandler.Instance.DeleteFile(mediafileid);
     }
 
-    public void deletePlaylist(int playlistid)
+    // Method to delete a playlist from the database
+    public void DeletePlaylist(int playlistid)
     {
-        Console.WriteLine("Deleting playlist with id: " + playlistid);
         DatabaseHandler.Instance.DeletePlaylist(playlistid);
         playlistDelete = true;
+    }
+
+    public void SetPlaylistDeleteToNo()
+    {
+        playlistDelete = false;
     }
 
 }
