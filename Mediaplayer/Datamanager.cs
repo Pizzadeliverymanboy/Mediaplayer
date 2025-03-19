@@ -35,7 +35,7 @@ public class Datamanager
     // Method to add a playlist to the database
     public void AddPlaylistToDatabase(string playlistname, string playlisttype)
     {
-        DatabaseHandler.Instance.AddPlaylist(playlistname, playlisttype);
+        DatabaseHandlerLite.Instance.AddPlaylist(playlistname, playlisttype);
     }
 
     // Method to add an audio playlist to the list
@@ -62,25 +62,25 @@ public class Datamanager
         this.audios.Clear();
         this.videos.Clear();
         this.images.Clear();
-        DatabaseHandler.Instance.GetPlaylists();
+        DatabaseHandlerLite.Instance.GetPlaylists();
     }
 
     // Method to add a file to the database
     public void AddFile(string filename, string filepath, string filetype, int playlistid)
     {
-        DatabaseHandler.Instance.AddFile(filename, filepath, filetype, playlistid);
+        DatabaseHandlerLite.Instance.AddFile(filename, filepath, filetype, playlistid);
     }
 
     // Method to delete a file from the database
     public void DeleteFile(int mediafileid)
     {
-        DatabaseHandler.Instance.DeleteFile(mediafileid);
+        DatabaseHandlerLite.Instance.DeleteFile(mediafileid);
     }
 
     // Method to delete a playlist from the database
     public void DeletePlaylist(int playlistid)
     {
-        DatabaseHandler.Instance.DeletePlaylist(playlistid);
+        DatabaseHandlerLite.Instance.DeletePlaylist(playlistid);
         playlistDelete = true;
     }
 
